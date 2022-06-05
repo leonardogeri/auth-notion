@@ -2,12 +2,8 @@ import os
 from wsgiref import headers
 from flask import Flask, render_template, redirect, request, session
 from flask_session import Session
-import base64
-import requests
-import json
 import psycopg2
-from datetime import datetime, timezone
-
+from functions import oauth
 
 app = Flask(__name__)
 
@@ -15,7 +11,6 @@ app = Flask(__name__)
 def authorizeUser():
    
    code, token_url, callback_uri, search_url, client_id, client_secret, DATABASE_URL, dt = getStaticVars('code', 'v1')
-       
    encoded_u, data_body = generateCredentials(client_id, client_secret)
    access_token_response, response = getAccessToken(token_url, encoded_u, data_body)    
    access_token, bot_id, workspace_id, user_id, email, name, user_workspace_id = getUserInfo(access_token_response)
