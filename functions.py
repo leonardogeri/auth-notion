@@ -1,26 +1,15 @@
 # Centralize all functions used in main.py to redesign coding pattern in full project
 
-class oauth(self):
-    import requests
-    import json
-    import base64
-    from datetime import datetime, timezone
+from dataclasses import dataclass
+
+
+class utils():
 
     def getDate():
         dt = datetime.now(timezone.utc)
         return dt
 
-    def getUrlVars(url_var):
-        code = request.args.get(url_var)
-        return code
-
-    def defineNotionUrl(version):
-        token_url = 'https://api.notion.com/{}/oauth/token'
-        callback_uri = "https://oauth2-notion.herokuapp.com/redirect"
-        search_url = 'https://api.notion.com/{}/search'
-
-        return token_url, callback_uri, search_url
-
+class envVars:
     def declareEnvVars():
         client_id = os.environ['CLIENT_ID']
         client_secret = os.environ['SECRET']
@@ -36,6 +25,7 @@ class oauth(self):
 
         return code, token_url, callback_uri, search_url, client_id, client_secret, DATABASE_URL, dt
 
+class auth:
     def getUserInfo(access_token_response):
         main_json = access_token_response.json()
         access_token = main_json['access_token']
@@ -58,6 +48,9 @@ class oauth(self):
         
         return encoded_u, data_body
 
+class notionTools:
+    "Tools for dealing with Notion API"
+
     def getAccessToken(token_url, encoded_u, data_body):
 
         access_token_response = requests.post(token_url, headers= {"Authorization":"Basic {}".format(encoded_u)}, data=data_body)
@@ -74,7 +67,6 @@ class oauth(self):
         return headers
 
     def notionFilter():
-
         search_payload = {
         "filter": {
             "value": "database",
@@ -82,7 +74,6 @@ class oauth(self):
         },
         "page_size": 100
     }
-    
         return search_payload
 
     def notionParams(access_token):
@@ -96,3 +87,16 @@ class oauth(self):
         database_id = db_json.json()['results'][0]['id']
         
         return database_id
+
+class UrlVars:
+
+    def getUrlVars(url_var):
+        code = request.args.get(url_var)
+        return code
+
+    def defineNotionUrl(version: str):
+        token_url = 'https://api.notion.com/{}/oauth/token'
+        callback_uri = "https://oauth2-notion.herokuapp.com/redirect"
+        search_url = 'https://api.notion.com/{}/search'
+
+        return token_url, callback_uri, search_url
