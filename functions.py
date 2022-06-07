@@ -1,3 +1,5 @@
+# Centralize all functions used in main.py to redesign coding pattern in full project
+
 class oauth(self):
     import requests
     import json
@@ -10,7 +12,6 @@ class oauth(self):
 
     def getUrlVars(url_var):
         code = request.args.get(url_var)
-
         return code
 
     def defineNotionUrl(version):
