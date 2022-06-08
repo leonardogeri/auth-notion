@@ -2,7 +2,6 @@
 
 from dataclasses import dataclass
 
-
 class utils():
 
     def getDate():
@@ -19,7 +18,7 @@ class envVars:
 
     def getStaticVars(url_var, version):
         code = getUrlVars(url_var)
-        token_url, callback_uri, search_url = defineNotionUrl(version)
+        token_url, callback_uri, search_url = UrlVars.defineNotionUrl(version)
         client_id, client_secret, DATABASE_URL = declareEnvVars()
         dt = getDate()
 

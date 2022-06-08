@@ -3,19 +3,20 @@ from wsgiref import headers
 from flask import Flask, render_template, redirect, request, session
 from flask_session import Session
 import psycopg2
-from functions import oauth
+from functions import notionTools, utils, envVars, auth, notionTools, UrlVars
+
 
 app = Flask(__name__)
 
 @app.route('/redirect', methods=['GET', 'POST'])
 def authorizeUser():
    
-   code, token_url, callback_uri, search_url, client_id, client_secret, DATABASE_URL, dt = getStaticVars('code', 'v1')
-   encoded_u, data_body = generateCredentials(client_id, client_secret)
-   access_token_response, response = getAccessToken(token_url, encoded_u, data_body)    
-   access_token, bot_id, workspace_id, user_id, email, name, user_workspace_id = getUserInfo(access_token_response)
+   code, token_url, callback_uri, search_url, client_id, client_secret, DATABASE_URL, dt = envVars.getStaticVars('code', 'v1')
+   encoded_u, data_body = auth.generateCredentials(client_id, client_secret)
+   access_token_response, response = notionTools.getAccessToken(token_url, encoded_u, data_body)    
+   access_token, bot_id, workspace_id, user_id, email, name, user_workspace_id = auth.getUserInfo(access_token_response)
 
-   headers, search_payload = notionParams(access_token)
+   headers, search_payload = notionTools.notionParams(access_token)
 
    database_id = getDatabaseId(search_url, search_payload, headers)
 
